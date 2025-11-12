@@ -7,8 +7,6 @@ Este proyecto implementa un experimento de **Integridad** basado en control de a
 - [Arquitectura](#arquitectura)
 - [ASR de Integridad](#asr-de-integridad)
 - [Estructura del Proyecto](#estructura-del-proyecto)
-- [Inicio Rápido](#inicio-rápido)
-- [Instalación y Despliegue](#instalación-y-despliegue)
 - [Ejecución del Experimento](#ejecución-del-experimento)
 - [Documentación](#documentación)
 
@@ -55,77 +53,6 @@ EXPERIMENTO-INTEGRIDAD/
 ├── README.md                  # Este archivo
 ├── QUICKSTART.md              # Guía rápida de inicio
 └── DEPLOY.md                  # Guía completa de despliegue
-```
-
-## 🚀 Inicio Rápido
-
-Para ejecutar el experimento localmente en 5 minutos, consulta [QUICKSTART.md](QUICKSTART.md).
-
-### Opción 1: Usar el Frontend Web (Recomendado)
-
-```bash
-# 1. Configurar microservicio
-cd products-service
-python3 -m venv venv && source venv/bin/activate
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py seed_products
-python manage.py runserver
-
-# 2. Abrir navegador en http://localhost:8000
-# 3. Usar las credenciales:
-#    - Admin: admin / admin123
-#    - Operario: operario / operario123
-```
-
-### Opción 2: Usar Scripts de Prueba
-
-```bash
-# 1. Configurar microservicio (igual que arriba)
-# 2. Generar tokens JWT
-cd ../tests
-python3 generate_tokens.py
-export ADMIN_TOKEN=$(cat admin_token.txt)
-export OPERARIO_TOKEN=$(cat operario_token.txt)
-
-# 3. Ejecutar pruebas
-./test_admin.sh      # Debe retornar 204
-./test_operario.sh   # Debe retornar 403
-```
-
-## 📦 Instalación y Despliegue
-
-### Opción 1: Despliegue Local (Desarrollo/Pruebas)
-
-Ver [QUICKSTART.md](QUICKSTART.md) para una guía rápida.
-
-### Opción 2: Despliegue en AWS (Producción)
-
-Ver [DEPLOY.md](DEPLOY.md) para instrucciones completas de despliegue con Terraform.
-
-**Resumen rápido:**
-
-```bash
-# 1. Configurar Terraform
-cd terraform
-cp terraform.tfvars.example terraform.tfvars
-# Editar terraform.tfvars con tus valores
-
-# 2. Desplegar infraestructura
-terraform init
-terraform plan
-terraform apply
-
-# 3. Configurar servicios (ver DEPLOY.md)
-# - Base de datos PostgreSQL
-# - Microservicio PRODUCTS (2 instancias)
-# - Kong API Gateway
-
-# 4. Ejecutar pruebas
-cd ../tests
-# Configurar variables de entorno con IPs de AWS
-./test_admin.sh
-./test_operario.sh
 ```
 
 ## 🧪 Ejecución del Experimento

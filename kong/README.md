@@ -60,10 +60,10 @@ curl -i -X POST http://localhost:8001/services/ \
   --data "name=products-service" \
   --data "url=http://PRODUCTS_SERVICE_IP:8000"
 
-# Crear la ruta
+# Crear la ruta (IMPORTANTE: usar /api para que coincida con Django)
 curl -i -X POST http://localhost:8001/services/products-service/routes \
   --data "hosts[]=localhost" \
-  --data "paths[]=/products" \
+  --data "paths[]=/api" \
   --data "methods[]=GET" \
   --data "methods[]=POST" \
   --data "methods[]=PUT" \

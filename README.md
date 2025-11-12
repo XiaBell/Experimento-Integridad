@@ -7,7 +7,6 @@ Este proyecto implementa un experimento de **Integridad** basado en control de a
 - [Arquitectura](#arquitectura)
 - [ASR de Integridad](#asr-de-integridad)
 - [Estructura del Proyecto](#estructura-del-proyecto)
-- [Ejecución del Experimento](#ejecución-del-experimento)
 - [Documentación](#documentación)
 
 ## 🏗️ Arquitectura
@@ -55,83 +54,11 @@ EXPERIMENTO-INTEGRIDAD/
 └── DEPLOY.md                  # Guía completa de despliegue
 ```
 
-## 🧪 Ejecución del Experimento
-
-### Escenario 1: ADMIN (Control - Éxito)
-
-```bash
-./tests/test_admin.sh
-```
-
-**Resultado Esperado**: 
-- Código HTTP: **204 No Content**
-- El producto es eliminado exitosamente
-- Log: "Acceso autorizado: Usuario ADMIN puede realizar DELETE"
-
-### Escenario 2: OPERARIO (Integridad - Rechazo)
-
-```bash
-./tests/test_operario.sh
-```
-
-**Resultado Esperado**: 
-- Código HTTP: **403 Forbidden**
-- El producto **NO** es eliminado
-- Mensaje: "Acción no autorizada. Requiere rol 'ADMIN'."
-- Log: "Acceso denegado: Usuario con rol 'OPERARIO' intentó realizar DELETE"
-
-## 📊 Evidencias
-
-Las evidencias del experimento deben incluir:
-
-1. **Pantallazo de Postman** con petición `DELETE` como ADMIN (204)
-2. **Pantallazo de Postman** con petición `DELETE` como OPERARIO (403)
-3. **Logs de Django** mostrando:
-   - Para ADMIN: "Acceso autorizado: Usuario ADMIN puede realizar DELETE"
-   - Para OPERARIO: "Acceso denegado: Usuario con rol 'OPERARIO' intentó realizar DELETE"
-
-## 📚 Documentación
-
-- **[EXPERIMENTO.md](docs/EXPERIMENTO.md)**: Documentación detallada del experimento, ASR, tácticas de arquitectura, y análisis de resultados
-- **[CREDENCIALES.md](CREDENCIALES.md)**: Credenciales de acceso para el experimento (admin/operario)
-- **[DEPLOY.md](DEPLOY.md)**: Guía completa de despliegue en AWS
-- **[QUICKSTART.md](QUICKSTART.md)**: Guía rápida para ejecutar localmente
-- **[kong/README.md](kong/README.md)**: Configuración e instalación de Kong
-- **[tests/README.md](tests/README.md)**: Instrucciones para ejecutar pruebas
-
-## 🧹 Limpieza
-
-**IMPORTANTE**: Al finalizar el experimento, destruir la infraestructura para evitar costos:
-
-```bash
-cd terraform
-terraform destroy
-```
-
-## 🔧 Troubleshooting
-
-### Error: Token JWT no se decodifica
-
-- Verificar que `JWT_SECRET_KEY` en Django coincida con la clave usada para firmar el token
-- Verificar que el token incluya el claim `role` con valor `ADMIN` o `OPERARIO`
-
-### Error: OPERARIO puede eliminar productos
-
-- Verificar que el middleware `JWTAuthenticationMiddleware` esté en `MIDDLEWARE` en `settings.py`
-- Verificar que la clase de permisos `IsAdminOrReadOnly` esté configurada en la vista
-- Revisar logs de Django para ver qué rol se está detectando
-
-### Error: Kong rechaza todas las peticiones
-
-- Verificar que el plugin JWT esté habilitado en Kong
-- Verificar que el token JWT sea válido y esté firmado con la clave correcta
-
 ## 📝 Notas
 
 - Este experimento está diseñado para demostrar el principio de **integridad** mediante control de acceso basado en roles (RBAC)
 - El frontend web permite probar visualmente el experimento sin necesidad de Postman o scripts
 - Las credenciales de prueba están documentadas en [CREDENCIALES.md](CREDENCIALES.md)
-- En producción, los tokens JWT deben venir de un proveedor de identidad (Auth0, Keycloak, etc.)
 - El código está preparado para integrarse con proveedores de identidad externos
 - Los tokens generados por `generate_tokens.py` son solo para pruebas locales
 

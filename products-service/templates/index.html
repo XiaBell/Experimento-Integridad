@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experimento de Integridad - Warehouse Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .login-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 2px solid #e9ecef;
+        }
+
+        .login-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .user-info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .user-info strong {
+            color: #1976D2;
+        }
+
+        .credentials-box {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .credentials-box h3 {
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .credentials-box code {
+            background: #fff;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            padding: 8px 20px;
+            font-size: 0.9em;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .products-section {
+            margin-top: 30px;
+        }
+
+        .products-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .product-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .product-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .product-card p {
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .product-card .sku {
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 3px;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+
+        .product-card .price {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #28a745;
+            margin: 10px 0;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        .message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .message.warning {
+            background: #fff3cd;
+            color: #856404;
+            border-left: 4px solid #ffc107;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .role-badge.admin {
+            background: #28a745;
+            color: white;
+        }
+
+        .role-badge.operario {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .logout-btn {
+            float: right;
+            margin-top: -50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏭 Warehouse Management</h1>
+            <p>Experimento de Integridad - Control de Acceso RBAC</p>
+        </div>
+
+        <div class="content">
+            <!-- Sección de Login -->
+            <div id="loginSection" class="login-section">
+                <h2>🔐 Iniciar Sesión</h2>
+                
+                <div class="credentials-box">
+                    <h3>📋 Credenciales de Prueba</h3>
+                    <p><strong>Admin:</strong> <code>admin</code> / <code>admin123</code> <span class="role-badge admin">ADMIN</span></p>
+                    <p><strong>Operario:</strong> <code>operario</code> / <code>operario123</code> <span class="role-badge operario">OPERARIO</span></p>
+                </div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Usuario:</label>
+                        <input type="text" id="username" name="username" required placeholder="admin o operario">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <input type="password" id="password" name="password" required placeholder="admin123 o operario123">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                </form>
+
+                <div id="loginMessage"></div>
+            </div>
+
+            <!-- Información del Usuario Logueado -->
+            <div id="userInfoSection" class="user-info" style="display: none;">
+                <strong>Usuario:</strong> <span id="currentUser"></span>
+                <span id="currentRole" class="role-badge"></span>
+                <button class="btn btn-secondary logout-btn" onclick="logout()">Cerrar Sesión</button>
+            </div>
+
+            <!-- Mensajes -->
+            <div id="messageContainer"></div>
+
+            <!-- Sección de Productos -->
+            <div id="productsSection" class="products-section" style="display: none;">
+                <h2>📦 Productos Disponibles</h2>
+                <div id="productsContainer" class="loading">Cargando productos...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api';
+        let currentToken = null;
+        let currentUser = null;
+
+        // Función para mostrar mensajes
+        function showMessage(text, type = 'info') {
+            const container = document.getElementById('messageContainer');
+            container.innerHTML = `<div class="message ${type}">${text}</div>`;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+
+        // Función de login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('loginMessage');
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/login/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    currentToken = data.token;
+                    currentUser = data.user;
+                    
+                    // Ocultar login, mostrar info de usuario y productos
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('userInfoSection').style.display = 'block';
+                    document.getElementById('productsSection').style.display = 'block';
+                    
+                    // Mostrar info del usuario
+                    document.getElementById('currentUser').textContent = currentUser.username;
+                    const roleBadge = document.getElementById('currentRole');
+                    roleBadge.textContent = currentUser.role;
+                    roleBadge.className = `role-badge ${currentUser.role.toLowerCase()}`;
+                    
+                    messageDiv.innerHTML = `<div class="message success">✅ Login exitoso como ${currentUser.role}</div>`;
+                    
+                    // Cargar productos
+                    loadProducts();
+                } else {
+                    messageDiv.innerHTML = `<div class="message error">❌ ${data.detail || 'Error en el login'}</div>`;
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `<div class="message error">❌ Error de conexión: ${error.message}</div>`;
+            }
+        });
+
+        // Función para cargar productos
+        async function loadProducts() {
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = '<div class="loading">Cargando productos...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/products/`, {
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al cargar productos');
+                }
+
+                const products = await response.json();
+                
+                if (products.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><h3>No hay productos disponibles</h3></div>';
+                    return;
+                }
+
+                // Limitar a 20 productos
+                const limitedProducts = products.slice(0, 20);
+                
+                container.innerHTML = '<div class="products-grid"></div>';
+                const grid = container.querySelector('.products-grid');
+
+                limitedProducts.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    card.innerHTML = `
+                        <h3>${product.name}</h3>
+                        <p><span class="sku">SKU: ${product.sku}</span></p>
+                        <p>${product.description || 'Sin descripción'}</p>
+                        <p><strong>Cantidad:</strong> ${product.quantity}</p>
+                        <p class="price">$${parseFloat(product.price).toFixed(2)}</p>
+                        <button class="btn btn-danger" onclick="deleteProduct(${product.id}, '${product.name}')">
+                            🗑️ Eliminar
+                        </button>
+                    `;
+                    grid.appendChild(card);
+                });
+
+            } catch (error) {
+                container.innerHTML = `<div class="message error">Error al cargar productos: ${error.message}</div>`;
+            }
+        }
+
+        // Función para eliminar producto
+        async function deleteProduct(productId, productName) {
+            if (!confirm(`¿Estás seguro de que deseas eliminar "${productName}"?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/products/${productId}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (response.status === 204 || response.status === 200) {
+                    showMessage(`✅ Producto "${productName}" eliminado exitosamente`, 'success');
+                    loadProducts(); // Recargar lista
+                } else if (response.status === 403) {
+                    const data = await response.json().catch(() => ({}));
+                    showMessage(`❌ Acceso Denegado: ${data.detail || 'No tienes permisos para eliminar productos. Solo usuarios ADMIN pueden realizar esta acción.'}`, 'error');
+                } else {
+                    const data = await response.json().catch(() => ({}));
+                    showMessage(`❌ Error: ${data.detail || 'No se pudo eliminar el producto'}`, 'error');
+                }
+            } catch (error) {
+                showMessage(`❌ Error de conexión: ${error.message}`, 'error');
+            }
+        }
+
+        // Función de logout
+        function logout() {
+            currentToken = null;
+            currentUser = null;
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('userInfoSection').style.display = 'none';
+            document.getElementById('productsSection').style.display = 'none';
+            document.getElementById('loginForm').reset();
+            document.getElementById('loginMessage').innerHTML = '';
+            document.getElementById('messageContainer').innerHTML = '';
+            showMessage('👋 Sesión cerrada', 'info');
+        }
+    </script>
+</body>
+</html>
+

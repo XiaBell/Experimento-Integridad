@@ -1,0 +1,52 @@
+_format_version: "3.0"
+_transform: true
+
+# Configuración de Kong para el experimento de integridad
+# Este archivo define los servicios, rutas y plugins necesarios
+
+services:
+  - name: products-service
+    url: http://PRODUCTS_SERVICE_IP:8000
+    # En producción, usar el balanceador de carga o IPs de las instancias PRODUCTS
+    routes:
+      - name: products-route
+        paths:
+          - /products
+        methods:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+        strip_path: false
+    plugins:
+      - name: jwt
+        config:
+          # Kong validará la firma del JWT
+          # El microservicio PRODUCTS confiará en que el token es válido
+          # y solo verificará el claim de roles
+          uri_param_names:
+            - token
+          cookie_names:
+            - jwt
+          header_names:
+            - authorization
+          claims_to_verify:
+            - exp
+          secret_is_base64: false
+          run_on_preflight: true
+
+# Configuración de consumidores (usuarios) para pruebas
+# En producción, estos se crearían dinámicamente desde el proveedor de identidad
+consumers:
+  - username: admin-user
+    jwt_secrets:
+      - key: admin-key
+        # En producción, esto vendría del proveedor de identidad
+        # Aquí es solo para pruebas locales
+  - username: operario-user
+    jwt_secrets:
+      - key: operario-key
+        # En producción, esto vendría del proveedor de identidad
+        # Aquí es solo para pruebas locales
+

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experimento de Integridad - Warehouse Management</title>
+    <title>Warehouse Management</title>
     <style>
         * {
             margin: 0;
@@ -12,8 +12,8 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
             min-height: 100vh;
             padding: 20px;
         }
@@ -22,26 +22,27 @@
             max-width: 1200px;
             margin: 0 auto;
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             overflow: hidden;
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #2c3e50;
             color: white;
-            padding: 30px;
-            text-align: center;
+            padding: 24px 30px;
+            border-bottom: 1px solid #34495e;
         }
 
         .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-size: 1.8em;
+            margin-bottom: 4px;
+            font-weight: 600;
         }
 
         .header p {
             opacity: 0.9;
-            font-size: 1.1em;
+            font-size: 0.95em;
         }
 
         .content {
@@ -49,50 +50,110 @@
         }
 
         .login-section {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            border: 2px solid #e9ecef;
+            padding: 30px;
         }
 
         .login-section h2 {
             color: #333;
             margin-bottom: 20px;
-            font-size: 1.5em;
+            font-size: 1.4em;
+            font-weight: 600;
         }
 
         .user-info {
-            background: #e7f3ff;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            border-left: 4px solid #2196F3;
+            background: #ecf0f1;
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .user-info strong {
-            color: #1976D2;
+            color: #2c3e50;
         }
 
-        .credentials-box {
-            background: #fff3cd;
+        .credentials-link {
+            text-align: right;
+            margin-bottom: 15px;
+        }
+
+        .credentials-link a {
+            color: #7f8c8d;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .credentials-link a:hover {
+            color: #2c3e50;
+            text-decoration: underline;
+        }
+
+        .credentials-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .credentials-modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .credentials-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .credentials-modal-header h3 {
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .close-modal {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .close-modal:hover {
+            color: #000;
+        }
+
+        .credentials-list {
+            background: #f8f9fa;
             padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-            border-left: 4px solid #ffc107;
+            border-radius: 4px;
+            margin-top: 10px;
         }
 
-        .credentials-box h3 {
-            color: #856404;
-            margin-bottom: 10px;
-            font-size: 1.1em;
+        .credentials-list p {
+            margin: 8px 0;
+            color: #34495e;
         }
 
-        .credentials-box code {
-            background: #fff;
+        .credentials-list code {
+            background: white;
             padding: 2px 6px;
             border-radius: 3px;
             font-size: 0.9em;
+            color: #e74c3c;
         }
 
         .form-group {
@@ -131,34 +192,34 @@
         }
 
         .btn-primary {
-            background: #667eea;
+            background: #3498db;
             color: white;
         }
 
         .btn-primary:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            background: #2980b9;
         }
 
         .btn-danger {
-            background: #dc3545;
+            background: #e74c3c;
             color: white;
-            padding: 8px 20px;
+            padding: 8px 16px;
             font-size: 0.9em;
         }
 
         .btn-danger:hover {
-            background: #c82333;
+            background: #c0392b;
         }
 
         .btn-secondary {
-            background: #6c757d;
+            background: #95a5a6;
             color: white;
+            padding: 8px 16px;
+            font-size: 0.9em;
         }
 
         .btn-secondary:hover {
-            background: #5a6268;
+            background: #7f8c8d;
         }
 
         .products-section {
@@ -168,7 +229,8 @@
         .products-section h2 {
             color: #333;
             margin-bottom: 20px;
-            font-size: 1.8em;
+            font-size: 1.5em;
+            font-weight: 600;
         }
 
         .products-grid {
@@ -187,9 +249,8 @@
         }
 
         .product-card:hover {
-            border-color: #667eea;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transform: translateY(-2px);
+            border-color: #3498db;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .product-card h3 {
@@ -213,9 +274,9 @@
         }
 
         .product-card .price {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #28a745;
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #27ae60;
             margin: 10px 0;
         }
 
@@ -269,21 +330,21 @@
 
         .role-badge {
             display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
             font-weight: 600;
             margin-left: 10px;
         }
 
         .role-badge.admin {
-            background: #28a745;
+            background: #27ae60;
             color: white;
         }
 
         .role-badge.operario {
-            background: #ffc107;
-            color: #333;
+            background: #f39c12;
+            color: white;
         }
 
         .logout-btn {
@@ -295,29 +356,27 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🏭 Warehouse Management</h1>
-            <p>Experimento de Integridad - Control de Acceso RBAC</p>
+            <h1>Warehouse Management</h1>
+            <p>Sistema de Gestión de Inventario</p>
         </div>
 
         <div class="content">
             <!-- Sección de Login -->
             <div id="loginSection" class="login-section">
-                <h2>🔐 Iniciar Sesión</h2>
+                <h2>Iniciar Sesión</h2>
                 
-                <div class="credentials-box">
-                    <h3>📋 Credenciales de Prueba</h3>
-                    <p><strong>Admin:</strong> <code>admin</code> / <code>admin123</code> <span class="role-badge admin">ADMIN</span></p>
-                    <p><strong>Operario:</strong> <code>operario</code> / <code>operario123</code> <span class="role-badge operario">OPERARIO</span></p>
+                <div class="credentials-link">
+                    <a href="#" onclick="showCredentials(); return false;">Ver credenciales de prueba</a>
                 </div>
 
                 <form id="loginForm">
                     <div class="form-group">
-                        <label for="username">Usuario:</label>
-                        <input type="text" id="username" name="username" required placeholder="admin o operario">
+                        <label for="username">Usuario</label>
+                        <input type="text" id="username" name="username" required>
                     </div>
                     <div class="form-group">
-                        <label for="password">Contraseña:</label>
-                        <input type="password" id="password" name="password" required placeholder="admin123 o operario123">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" name="password" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
                 </form>
@@ -337,8 +396,26 @@
 
             <!-- Sección de Productos -->
             <div id="productsSection" class="products-section" style="display: none;">
-                <h2>📦 Productos Disponibles</h2>
+                <h2>Productos Disponibles</h2>
                 <div id="productsContainer" class="loading">Cargando productos...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Credenciales -->
+    <div id="credentialsModal" class="credentials-modal">
+        <div class="credentials-modal-content">
+            <div class="credentials-modal-header">
+                <h3>Credenciales de Prueba</h3>
+                <button class="close-modal" onclick="closeCredentials()">&times;</button>
+            </div>
+            <div class="credentials-list">
+                <p><strong>Administrador:</strong></p>
+                <p>Usuario: <code>admin</code></p>
+                <p>Contraseña: <code>admin123</code></p>
+                <p style="margin-top: 15px;"><strong>Operario:</strong></p>
+                <p>Usuario: <code>operario</code></p>
+                <p>Contraseña: <code>operario123</code></p>
             </div>
         </div>
     </div>
@@ -390,15 +467,15 @@
                     roleBadge.textContent = currentUser.role;
                     roleBadge.className = `role-badge ${currentUser.role.toLowerCase()}`;
                     
-                    messageDiv.innerHTML = `<div class="message success">✅ Login exitoso como ${currentUser.role}</div>`;
+                    messageDiv.innerHTML = `<div class="message success">Login exitoso como ${currentUser.role}</div>`;
                     
                     // Cargar productos
                     loadProducts();
                 } else {
-                    messageDiv.innerHTML = `<div class="message error">❌ ${data.detail || 'Error en el login'}</div>`;
+                    messageDiv.innerHTML = `<div class="message error">${data.detail || 'Error en el login'}</div>`;
                 }
             } catch (error) {
-                messageDiv.innerHTML = `<div class="message error">❌ Error de conexión: ${error.message}</div>`;
+                messageDiv.innerHTML = `<div class="message error">Error de conexión: ${error.message}</div>`;
             }
         });
 
@@ -416,10 +493,14 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('Error al cargar productos');
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.detail || `Error ${response.status}: ${response.statusText}`);
                 }
 
-                const products = await response.json();
+                const data = await response.json();
+                
+                // Manejar si la respuesta es un array o un objeto con results (paginación)
+                let products = Array.isArray(data) ? data : (data.results || data.data || []);
                 
                 if (products.length === 0) {
                     container.innerHTML = '<div class="empty-state"><h3>No hay productos disponibles</h3></div>';
@@ -442,14 +523,32 @@
                         <p><strong>Cantidad:</strong> ${product.quantity}</p>
                         <p class="price">$${parseFloat(product.price).toFixed(2)}</p>
                         <button class="btn btn-danger" onclick="deleteProduct(${product.id}, '${product.name}')">
-                            🗑️ Eliminar
+                            Eliminar
                         </button>
                     `;
                     grid.appendChild(card);
                 });
 
             } catch (error) {
+                console.error('Error cargando productos:', error);
                 container.innerHTML = `<div class="message error">Error al cargar productos: ${error.message}</div>`;
+            }
+        }
+
+        // Funciones para el modal de credenciales
+        function showCredentials() {
+            document.getElementById('credentialsModal').style.display = 'block';
+        }
+
+        function closeCredentials() {
+            document.getElementById('credentialsModal').style.display = 'none';
+        }
+
+        // Cerrar modal al hacer click fuera
+        window.onclick = function(event) {
+            const modal = document.getElementById('credentialsModal');
+            if (event.target == modal) {
+                closeCredentials();
             }
         }
 
@@ -469,17 +568,17 @@
                 });
 
                 if (response.status === 204 || response.status === 200) {
-                    showMessage(`✅ Producto "${productName}" eliminado exitosamente`, 'success');
+                    showMessage(`Producto "${productName}" eliminado exitosamente`, 'success');
                     loadProducts(); // Recargar lista
                 } else if (response.status === 403) {
                     const data = await response.json().catch(() => ({}));
-                    showMessage(`❌ Acceso Denegado: ${data.detail || 'No tienes permisos para eliminar productos. Solo usuarios ADMIN pueden realizar esta acción.'}`, 'error');
+                    showMessage(`Acceso Denegado: ${data.detail || 'No tienes permisos para eliminar productos. Solo usuarios ADMIN pueden realizar esta acción.'}`, 'error');
                 } else {
                     const data = await response.json().catch(() => ({}));
-                    showMessage(`❌ Error: ${data.detail || 'No se pudo eliminar el producto'}`, 'error');
+                    showMessage(`Error: ${data.detail || 'No se pudo eliminar el producto'}`, 'error');
                 }
             } catch (error) {
-                showMessage(`❌ Error de conexión: ${error.message}`, 'error');
+                showMessage(`Error de conexión: ${error.message}`, 'error');
             }
         }
 
@@ -493,7 +592,7 @@
             document.getElementById('loginForm').reset();
             document.getElementById('loginMessage').innerHTML = '';
             document.getElementById('messageContainer').innerHTML = '';
-            showMessage('👋 Sesión cerrada', 'info');
+            showMessage('Sesión cerrada', 'info');
         }
     </script>
 </body>

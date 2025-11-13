@@ -49,9 +49,7 @@ EXPERIMENTO-INTEGRIDAD/
 │   └── generate_tokens.py     # Generador de tokens JWT
 ├── docs/                      # Documentación
 │   └── EXPERIMENTO.md         # Documentación detallada del experimento
-├── README.md                  # Este archivo
-├── QUICKSTART.md              # Guía rápida de inicio
-└── DEPLOY.md                  # Guía completa de despliegue
+└── README.md                  # Este archivo
 ```
 
 ## 📝 Notas

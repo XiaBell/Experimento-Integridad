@@ -49,7 +49,7 @@ ROOT_URLCONF = 'products_service.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.middleware.template.backends.django.DjangoTemplates',
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {

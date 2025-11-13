@@ -22,9 +22,9 @@ variable "key_name" {
 }
 
 variable "db_username" {
-  description = "Usuario de la base de datos PostgreSQL"
+  description = "Usuario de la base de datos PostgreSQL (NO usar 'postgres' - debe ser un usuario de aplicación con permisos restringidos)"
   type        = string
-  default     = "postgres"
+  default     = "warehouse_app"
 }
 
 variable "db_password" {

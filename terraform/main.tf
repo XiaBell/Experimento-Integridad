@@ -219,8 +219,26 @@ resource "aws_instance" "database" {
               
               # Configurar PostgreSQL
               sudo -u postgres psql -c "CREATE DATABASE warehouse_db;"
+              
+              # Crear usuario de aplicación con permisos restringidos
               sudo -u postgres psql -c "CREATE USER ${var.db_username} WITH PASSWORD '${var.db_password}';"
-              sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE warehouse_db TO ${var.db_username};"
+              
+              # Conceder privilegios de conexión a la base de datos
+              sudo -u postgres psql -c "GRANT CONNECT ON DATABASE warehouse_db TO ${var.db_username};"
+              
+              # Conceder uso del esquema público (necesario para acceder a las tablas)
+              sudo -u postgres psql -d warehouse_db -c "GRANT USAGE ON SCHEMA public TO ${var.db_username};"
+              
+              # Conceder solo permisos de datos (NO permisos de esquema)
+              # Esto permite SELECT, INSERT, UPDATE, DELETE pero NO DROP TABLE, ALTER TABLE, etc.
+              sudo -u postgres psql -d warehouse_db -c "GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO ${var.db_username};"
+              
+              # Conceder permisos en secuencias (para auto-increment de IDs)
+              sudo -u postgres psql -d warehouse_db -c "GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO ${var.db_username};"
+              
+              # Asegurar que los permisos se apliquen a tablas futuras (creadas por Django migrations)
+              sudo -u postgres psql -d warehouse_db -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO ${var.db_username};"
+              sudo -u postgres psql -d warehouse_db -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO ${var.db_username};"
               
               # Configurar para aceptar conexiones
               echo "host    all             all             10.0.0.0/16               md5" >> /etc/postgresql/*/main/pg_hba.conf

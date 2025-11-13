@@ -7,6 +7,25 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+class IsAuthenticatedJWT(permissions.BasePermission):
+    """
+    Permiso que verifica autenticación mediante JWT (user_info del middleware).
+    Reemplaza IsAuthenticated de DRF para trabajar con JWT personalizado.
+    """
+    
+    def has_permission(self, request, view):
+        """
+        Verifica si el usuario está autenticado mediante JWT.
+        """
+        user_info = getattr(request, 'user_info', None)
+        
+        if not user_info:
+            logger.warning(f"Acceso denegado: Usuario no autenticado intentó realizar {request.method}")
+            return False
+        
+        return True
+
+
 class IsAdminOrReadOnly(permissions.BasePermission):
     """
     Permiso que permite:
@@ -28,6 +47,7 @@ class IsAdminOrReadOnly(permissions.BasePermission):
         
         # Permitir métodos de lectura a todos los usuarios autenticados
         if request.method in permissions.SAFE_METHODS:
+            logger.info(f"Acceso autorizado: Usuario autenticado con rol '{user_role}' puede realizar {request.method}")
             return True
         
         # Para métodos de escritura, verificar que el usuario sea ADMIN

@@ -2,9 +2,6 @@ from django.db import models
 
 
 class Product(models.Model):
-    """
-    Modelo que representa un producto en el warehouse.
-    """
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     sku = models.CharField(max_length=100, unique=True)

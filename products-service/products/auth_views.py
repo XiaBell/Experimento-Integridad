@@ -1,7 +1,3 @@
-"""
-Vistas de autenticación simples para el experimento.
-En producción, esto debería integrarse con un proveedor de identidad (Auth0/Keycloak).
-"""
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -13,8 +9,6 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
-# Usuarios de prueba para el experimento
-# En producción, estos vendrían de una base de datos o proveedor de identidad
 TEST_USERS = {
     'admin': {
         'password': 'admin123',
@@ -32,22 +26,13 @@ TEST_USERS = {
 
 
 def generate_jwt_token(user_data):
-    """
-    Genera un token JWT para el usuario.
-    
-    Args:
-        user_data: Diccionario con información del usuario (username, role, email)
-    
-    Returns:
-        str: Token JWT codificado
-    """
     payload = {
         'sub': user_data['username'],
         'username': user_data['username'],
         'role': user_data['role'],
         'email': user_data['email'],
         'iat': datetime.utcnow(),
-        'exp': datetime.utcnow() + timedelta(hours=24),  # Token válido por 24 horas
+        'exp': datetime.utcnow() + timedelta(hours=24),
     }
     
     token = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
@@ -57,26 +42,6 @@ def generate_jwt_token(user_data):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login(request):
-    """
-    Endpoint de login simple que acepta usuario y contraseña
-    y retorna un token JWT.
-    
-    Body esperado:
-    {
-        "username": "admin" o "operario",
-        "password": "admin123" o "operario123"
-    }
-    
-    Respuesta exitosa:
-    {
-        "token": "eyJ0eXAiOiJKV1QiLCJhbGc...",
-        "user": {
-            "username": "admin",
-            "role": "ADMIN",
-            "email": "admin@warehouse.com"
-        }
-    }
-    """
     username = request.data.get('username', '').lower()
     password = request.data.get('password', '')
     
@@ -86,7 +51,6 @@ def login(request):
             status=status.HTTP_400_BAD_REQUEST
         )
     
-    # Verificar credenciales
     user_data = TEST_USERS.get(username)
     
     if not user_data or user_data['password'] != password:
@@ -96,7 +60,6 @@ def login(request):
             status=status.HTTP_401_UNAUTHORIZED
         )
     
-    # Generar token JWT
     token = generate_jwt_token(user_data)
     
     logger.info(f"Login exitoso para usuario: {username} con rol: {user_data['role']}")
@@ -114,10 +77,6 @@ def login(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def test_users(request):
-    """
-    Endpoint que retorna las credenciales de prueba.
-    Solo para desarrollo/testing.
-    """
     return Response({
         "message": "Credenciales de prueba para el experimento",
         "users": {

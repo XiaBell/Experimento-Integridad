@@ -7,7 +7,6 @@ Este proyecto implementa un experimento de **Integridad** basado en control de a
 - [Arquitectura](#arquitectura)
 - [ASR de Integridad](#asr-de-integridad)
 - [Estructura del Proyecto](#estructura-del-proyecto)
-- [Documentación](#documentación)
 
 ## 🏗️ Arquitectura
 

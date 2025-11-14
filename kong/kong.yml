@@ -6,8 +6,7 @@ _transform: true
 
 services:
   - name: products-service
-    url: http://PRODUCTS_SERVICE_IP:8000
-    # En producción, usar el balanceador de carga o IPs de las instancias PRODUCTS
+    url: http://172.31.79.106:8000
     routes:
       - name: products-route
         paths:
@@ -18,6 +17,12 @@ services:
           - PUT
           - PATCH
           - DELETE
+        strip_path: false
+      - name: frontend-route
+        paths:
+          - /
+        methods:
+          - GET
         strip_path: false
     plugins:
       - name: jwt
